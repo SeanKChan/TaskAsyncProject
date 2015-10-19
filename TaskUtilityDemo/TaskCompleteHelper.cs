@@ -23,6 +23,7 @@ namespace TaskUtilityDemo
         {
             var result = await task;
             Trace.WriteLine(result);
+//            Console.WriteLine(result);
         }
 
         public static async Task ProcessTaskAsync()

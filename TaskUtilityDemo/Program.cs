@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace TaskUtilityDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
-        {   
-
+        private static void Main(string[] args)
+        {
+            var task = TaskCompleteHelper.ProcessTaskAsync();
+            task.Wait();
         }
     }
 }
