@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpTaskClient", "HttpTaskC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwaiterDemo", "AwaiterDemo\AwaiterDemo.csproj", "{D350957D-270D-4760-B1F1-A8F05E63A03C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskUtilityDemo", "TaskUtilityDemo\TaskUtilityDemo.csproj", "{F152508D-3C83-482B-A71B-3CAADC399120}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{D350957D-270D-4760-B1F1-A8F05E63A03C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D350957D-270D-4760-B1F1-A8F05E63A03C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D350957D-270D-4760-B1F1-A8F05E63A03C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F152508D-3C83-482B-A71B-3CAADC399120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F152508D-3C83-482B-A71B-3CAADC399120}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F152508D-3C83-482B-A71B-3CAADC399120}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F152508D-3C83-482B-A71B-3CAADC399120}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
