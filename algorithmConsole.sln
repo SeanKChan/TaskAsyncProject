@@ -19,6 +19,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwaiterDemo", "AwaiterDemo\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskUtilityDemo", "TaskUtilityDemo\TaskUtilityDemo.csproj", "{F152508D-3C83-482B-A71B-3CAADC399120}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParallelDemo2", "ParallelDemo2\ParallelDemo2.csproj", "{A5F42EA6-EA53-4EDE-9C7A-78D993A822E6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{640F81F4-E881-4449-BAC8-E741DD3CD149}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +64,10 @@ Global
 		{F152508D-3C83-482B-A71B-3CAADC399120}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F152508D-3C83-482B-A71B-3CAADC399120}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F152508D-3C83-482B-A71B-3CAADC399120}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5F42EA6-EA53-4EDE-9C7A-78D993A822E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5F42EA6-EA53-4EDE-9C7A-78D993A822E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5F42EA6-EA53-4EDE-9C7A-78D993A822E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5F42EA6-EA53-4EDE-9C7A-78D993A822E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,6 +12,7 @@ namespace TaskUtilityDemo
         {
             var task = TaskCompleteHelper.ProcessTaskAsync();
             task.Wait();
+           
         }
     }
 }
