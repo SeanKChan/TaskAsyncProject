@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +18,22 @@ namespace DataFlowDemo
             var c = Task.Factory.StartNew(Consumer);
             Task.WaitAll(p, c);*/
 
-            TestSync();
+//            TestSync();
+
+//            TestDownloadHtml();
+
+//            TestSync2();
+
+//            TestSync3();
+
+//            TestSync4();
+
+//            TestSync5();
+//            Test();
+
+//            TestSync6();
+
+            TestSync7();
         }
 
         #region bufferBlock
@@ -50,11 +66,11 @@ namespace DataFlowDemo
 
         public static ActionBlock<int> abSync = new ActionBlock<int>(async (i) =>
         {
-            Thread.Sleep(1000);
-//            await Task.Delay(1000);
+//            Thread.Sleep(1000);
+            await Task.Delay(1000);
             Console.WriteLine(i + " ThreadId:" + Thread.CurrentThread.ManagedThreadId + " Execute Time:" + DateTime.Now);
         }
-            /*, new ExecutionDataflowBlockOptions() {MaxDegreeOfParallelism = 3}*/); //并行处理，最多可以3个并行处理
+            , new ExecutionDataflowBlockOptions() {MaxDegreeOfParallelism = 3}); //并行处理，最多可以3个并行处理
 
         public static void TestSync()
         {
@@ -70,5 +86,236 @@ namespace DataFlowDemo
         }
 
         #endregion
+
+        #region TransformBlock
+
+        public static TransformBlock<string, string> tbUrl = new TransformBlock<string, string>((url) =>
+        {
+            WebClient client = new WebClient();
+            return client.DownloadString(url);
+        });
+
+        public static void TestDownloadHtml()
+        {
+            tbUrl.Post("http://www.baidu.com");
+            tbUrl.Post("http://www.sina.com");
+
+            for (var i = 0; i < 3; i++)
+            {
+                string result = tbUrl.Receive();
+                Console.WriteLine(result);
+            }
+            tbUrl.Complete();
+            Console.WriteLine("Post Finished");
+            tbUrl.Completion.Wait();
+            Console.WriteLine("Proccess Finished");
+        }
+
+        #endregion
+
+        #region TranformManyBlock
+
+        public static TransformManyBlock<int, int> tmb =
+            new TransformManyBlock<int, int>((i) => new int[] {i, i + 1});
+
+        public static ActionBlock<int> ab = new ActionBlock<int>((i) => Console.WriteLine(i));
+
+        public static void TestSync2()
+        {
+            tmb.LinkTo(ab);
+
+            for (int i = 0; i < 4; i++)
+            {
+                tmb.Post(i);
+            }
+            tmb.Complete();
+            Console.WriteLine("Post Finished");
+            tmb.Completion.Wait();
+            Console.WriteLine("Process Finished");
+        }
+
+        #endregion
+
+        #region BroadcastBlock
+
+        private static BroadcastBlock<int> bb = new BroadcastBlock<int>((i) => { return i; });
+
+        private static ActionBlock<int> displayBlock =
+            new ActionBlock<int>((i) => { Console.WriteLine("Display " + i); });
+
+        private static ActionBlock<int> saveBlock = new ActionBlock<int>((i) => { Console.WriteLine("Save " + i); });
+        private static ActionBlock<int> sendBlock = new ActionBlock<int>((i) => { Console.WriteLine("Send " + i); });
+
+        public static void TestSync3()
+        {
+            bb.LinkTo(displayBlock);
+            bb.LinkTo(saveBlock);
+            bb.LinkTo(sendBlock);
+
+            for (int i = 0; i < 4; i++)
+            {
+                bb.Post(i);
+            }
+            //由此可知Post之后再添加linkToBlock的话，那些Block只会收到最后一条数据
+            /*bb.LinkTo(displayBlock);
+            bb.LinkTo(saveBlock);
+            bb.LinkTo(sendBlock);*/
+
+
+            bb.Complete();
+            Console.WriteLine("Post Finished");
+            bb.Completion.Wait();
+            Console.WriteLine("Process Finished");
+            Console.WriteLine("Recive:" + bb.Receive());
+        }
+
+        #endregion
+
+        #region WriteOnceBlock
+
+        private static WriteOnceBlock<int> wb = new WriteOnceBlock<int>((i) => { return i; });
+
+        private static void TestSync4()
+        {
+            wb.LinkTo(displayBlock);
+            wb.LinkTo(saveBlock);
+            wb.LinkTo(sendBlock);
+
+            for (int i = 0; i < 4; i++)
+            {
+                wb.Post(i);
+            }
+
+            wb.Complete();
+            Console.WriteLine("Post Finished");
+            wb.Completion.Wait();
+            Console.WriteLine("Process Finished");
+            Console.WriteLine("Recive:" + wb.Receive());
+        }
+
+        #endregion
+
+        #region BatchBlock
+
+        private static BatchBlock<int> batchB = new BatchBlock<int>(3);
+
+        private static ActionBlock<int[]> ab1 = new ActionBlock<int[]>((i) =>
+        {
+            string s = i.Aggregate(string.Empty, (current, m) => current + (m + " "));
+            Console.WriteLine(s);
+        });
+
+        private static void TestSync5()
+        {
+            batchB.LinkTo(ab1);
+            for (int i = 0; i < 10; i++)
+            {
+                batchB.Post(i);
+            }
+
+            batchB.Complete();
+            Console.WriteLine("Post Finished");
+            batchB.Completion.Wait();
+            Console.WriteLine("Process Finished");
+//            Console.WriteLine(new Exception().ToString());
+        }
+
+        #endregion
+
+        #region JoinBlock
+
+        private static JoinBlock<int, string> joinB = new JoinBlock<int, string>();
+
+        private static ActionBlock<Tuple<int, string>> ab2 =
+            new ActionBlock<Tuple<int, string>>((i) => { Console.WriteLine(i.Item1 + "   " + i.Item2); });
+
+        public static void TestSync6()
+        {
+            joinB.LinkTo(ab2);
+
+            for (int i = 0; i < 5; i++)
+            {
+                joinB.Target1.Post(i);
+            }
+
+            for (int i = 5; i > 0; i--)
+            {
+                Thread.Sleep(1000);
+                joinB.Target2.Post(i.ToString());
+            }
+
+            joinB.Complete();
+            Console.WriteLine("Post Finished");
+            //joinB.Completion.Wait();
+//            Console.WriteLine("Process Finished");
+        }
+
+        #endregion
+
+        #region BatchedJoinBlock
+
+        private static BatchedJoinBlock<int, string> bjb = new BatchedJoinBlock<int, string>(3);
+
+        private static ActionBlock<Tuple<IList<int>, IList<string>>> ab3 =
+            new ActionBlock<Tuple<IList<int>, IList<string>>>((i) =>
+            {
+                Console.WriteLine("-----------------------------");
+                foreach (int m in i.Item1)
+                {
+                    Console.WriteLine(m);
+                }
+                ;
+
+                foreach (string s in i.Item2)
+                {
+                    Console.WriteLine(s);
+                }
+                ;
+            });
+
+        public static void TestSync7()
+        {
+            bjb.LinkTo(ab3);
+
+            for (int i = 0; i < 5; i++)
+            {
+                bjb.Target1.Post(i);
+            }
+
+            for (int i = 5; i > 0; i--)
+            {
+                bjb.Target2.Post(i.ToString());
+            }
+
+            Console.WriteLine("Finished post");
+
+            bjb.Receive();
+        }
+
+        #endregion
+
+        private static void Test()
+        {
+            int[] arr = {1, 2, 3, 4, 5, 6, 7};
+            string s = string.Empty;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            s = arr.Aggregate(string.Empty, (current, m) =>
+            {
+                Console.WriteLine(" ThreadId:" + Thread.CurrentThread.ManagedThreadId + " Execute Time:" + DateTime.Now);
+                return current + (m + " ");
+            });
+
+            /* foreach (var  item in arr)
+            {
+                Console.WriteLine(" ThreadId:" + Thread.CurrentThread.ManagedThreadId + " Execute Time:" + DateTime.Now);
+                s += item + "  ";
+            }*/
+            sw.Stop();
+
+            Console.WriteLine("Process Costs Time:" + sw.ElapsedMilliseconds);
+            Console.WriteLine(" ThreadId:" + Thread.CurrentThread.ManagedThreadId + " Execute Time:" + DateTime.Now);
+            Console.WriteLine(s);
+        }
     }
 }
