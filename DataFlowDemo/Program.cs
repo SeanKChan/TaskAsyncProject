@@ -33,7 +33,10 @@ namespace DataFlowDemo
 
 //            TestSync6();
 
-            TestSync7();
+//            TestSync7();
+
+            TestSync8();
+
         }
 
         #region bufferBlock
@@ -290,6 +293,42 @@ namespace DataFlowDemo
             Console.WriteLine("Finished post");
 
             bjb.Receive();
+        }
+
+        #endregion
+
+
+        #region TestSync8
+
+        private static ActionBlock<int> ab4 = new ActionBlock<int>((i) =>
+        {
+            Thread.Sleep(1000);
+            Console.WriteLine(i + " ThreadId : " + Thread.CurrentThread.ManagedThreadId + " Excute Time:" + DateTime.Now);
+        });
+
+        private static TransformBlock<int, int> tbSync = new TransformBlock<int, int>((i) => i*2);
+
+        public static void TestSync8()
+        {
+            tbSync.LinkTo(ab4);
+
+            for (int i = 0; i < 10; i++)
+            {
+                tbSync.Post(i);
+            }
+            for (int i = 9; i >= 0; i--)
+            {
+                Console.WriteLine(tbSync.Receive());
+            }
+
+            tbSync.Complete();
+            Console.WriteLine("Post finished");
+
+            tbSync.Completion.Wait();
+            Console.WriteLine("TransformBlock process finished");
+
+         
+
         }
 
         #endregion
