@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataFlowDemo", "DataFlowDem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskSchedulerConsole", "TaskSchedulerConsole\TaskSchedulerConsole.csproj", "{78F5E465-7051-4C81-A2ED-E585CA34D75A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FbiConsole", "FbiConsole\FbiConsole.csproj", "{3BF50F30-37D1-4E82-96A9-0916A80C3403}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{78F5E465-7051-4C81-A2ED-E585CA34D75A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78F5E465-7051-4C81-A2ED-E585CA34D75A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78F5E465-7051-4C81-A2ED-E585CA34D75A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BF50F30-37D1-4E82-96A9-0916A80C3403}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BF50F30-37D1-4E82-96A9-0916A80C3403}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BF50F30-37D1-4E82-96A9-0916A80C3403}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BF50F30-37D1-4E82-96A9-0916A80C3403}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
